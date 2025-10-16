@@ -25,13 +25,15 @@ internal class Program
             return;
         }
 
-        Console.CursorVisible = false;
+        Console.CursorVisible = true;
 
         LevelData newGame = new LevelData();
 
         newGame.Load("Level1.txt");
 
         Player? player = null;
+
+        Rat rat = null;
 
         foreach (var element in newGame.Elements)
         {
@@ -41,7 +43,14 @@ internal class Program
             {
                 player = p;
             }
+            if (element is Rat r)
+            {
+                rat = r;
+            }
+
         }
+
+
 
         LevelElement? Collision(int newX, int newY)
         {
@@ -57,6 +66,29 @@ internal class Program
 
         }
 
+        //void CollideWithEnemy()
+        //{
+        //    if (collisionElement is Enemy enemy)
+        //        {
+        //        int attackPoints = player.AttackDice.Throw();
+        //        int defencePoints = enemy.DefenceDice.Throw();
+        //        int resultOfAttack = attackPoints - defencePoints;
+        //        if (resultOfAttack > 0)
+        //        {
+        //            enemy.HP -= resultOfAttack;
+        //            if (enemy.HP <= 0)
+        //            {
+        //                // TODO: //enemy.Erase(); erase måste ta bort position och plats i list elements
+        //            }
+
+
+        //        }
+
+        //    }
+        //}
+
+
+
 
 
         while (player.HP > 0)
@@ -69,7 +101,7 @@ internal class Program
             if (playerInput.Key == ConsoleKey.UpArrow)
             {
                 newX = player.X;
-                newY = player.Y--;
+                newY = player.Y - 1;
 
                 LevelElement? collisionElement = Collision(newX, newY);
                 if (collisionElement == null)
@@ -97,18 +129,18 @@ internal class Program
             else if (playerInput.Key == ConsoleKey.DownArrow)
             {
                 newX = player.X;
-                newY = player.Y++;
+                newY = player.Y + 1;
 
                 LevelElement? collisionElement = Collision(newX, newY);
                 if (collisionElement == null)
                 {
                     player.MoveIn(Direction.Down);
                 }
-                
+
             }
             else if (playerInput.Key == ConsoleKey.LeftArrow)
             {
-                newX = player.X--;
+                newX = player.X - 1;
                 newY = player.Y;
 
                 LevelElement? collisionElement = Collision(newX, newY);
@@ -119,7 +151,7 @@ internal class Program
             }
             else if (playerInput.Key == ConsoleKey.RightArrow)
             {
-                newX = player.X++;
+                newX = player.X + 1;
                 newY = player.Y;
 
                 LevelElement? collisionElement = Collision(newX, newY);
@@ -129,18 +161,20 @@ internal class Program
                 }
             }
 
+            //rats turn?? 
+
         }
     }
 
-    //private void DoSomethging()
+    //static? private? void GameLoop()
     //{
 
     //}
 
-    
-    
-    
-    
+
+
+
+
 
     //is collision between , gör boolean istället
     //kolla i update istället?

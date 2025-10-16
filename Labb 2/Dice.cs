@@ -1,5 +1,4 @@
 ﻿namespace Labb_2;
-
 public class Dice
 {
     private int _numberOfDice;

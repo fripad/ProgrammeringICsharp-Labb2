@@ -15,12 +15,10 @@ public abstract class LevelElement
         Console.ResetColor();
     }
 
-    public void MoveIn(Direction direction) //används först när man vet att pos är ledig 
+    public void MoveIn(Direction direction)
     {
-        //int oldX = X;
-        //int oldY = Y;
-        Console.SetCursorPosition(X - 1, Y);
-        Console.Write(" "); //\b?
+        Console.SetCursorPosition(X, Y);
+        Console.Write(" ");
 
         switch (direction)
         {
@@ -41,9 +39,9 @@ public abstract class LevelElement
                 Draw();
                 break;
         }
-        // TODO: switch
-        
-      
+
+
+
     }
 
 

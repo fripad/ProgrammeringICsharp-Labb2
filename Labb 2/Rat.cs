@@ -2,6 +2,7 @@
 
 public class Rat : Enemy
 {
+    private readonly Random _random = new Random();
     public Rat(int x, int y)
     {
         X = x;
@@ -16,12 +17,20 @@ public class Rat : Enemy
     public override void Update()
     {
         // TODO: Update()
-        //Förflyttningsmönster
-        //-Spelaren förflyttar sig 1 steg upp, ner, höger eller vänster varje omgång, alternativt står still,
-        //beroende på vilken knapp användaren tryckt på.
-        //-Rat förflyttar sig 1 steg i slumpmässig vald riktning(upp, ner, höger eller vänster) varje omgång.
-        //-Snake står still om spelaren är mer än 2 rutor bort, annars förflyttar den sig bort från spelaren.
-        //-Varken spelare, rats eller snakes kan gå igenom väggar eller varandra.
+    }
 
+    public void MoveRat()
+    {
+        Console.SetCursorPosition(X, Y);
+        Console.Write(" ");
+
+
+        Direction[] directions = (Direction[])Enum.GetValues(typeof(Direction));
+
+        Direction randomDirection = directions[_random.Next(directions.Length)];
+
+
+
+        MoveIn(randomDirection);
     }
 }

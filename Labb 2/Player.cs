@@ -21,6 +21,6 @@ public class Player : LevelElement
         AttackDice = new Dice(2, 6, 2);
         DefenceDice = new Dice(2, 6, 0);
     }
-    
+
 
 }

@@ -1,6 +1,6 @@
 ﻿namespace Labb_2;
 
-public class LevelData 
+public class LevelData
 {
 
     private List<LevelElement> _elements;
@@ -14,7 +14,7 @@ public class LevelData
     {
         _elements = new List<LevelElement>();
 
-        
+
         using (StreamReader reader = new StreamReader(filename))
         {
             int x = 0;
@@ -50,17 +50,17 @@ public class LevelData
                 }
                 else
                 {
-                    x++; 
+                    x++;
                 }
 
 
             }
         }
-         
+
     }
 
     // TODO: gör om till switch?
-    
+
 
 
 }
