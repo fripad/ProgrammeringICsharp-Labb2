@@ -74,9 +74,7 @@ internal class Program
                     if (enemy.HP > 0)
                     {
                         enemy.Update(newGame);
-                    }
-
-
+                    } 
                     else
                     {
                         enemy.EraseFromDungeon();

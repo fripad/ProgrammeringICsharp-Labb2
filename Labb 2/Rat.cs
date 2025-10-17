@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Labb_2;
+﻿namespace Labb_2;
 
 public class Rat : Enemy
 {
@@ -17,7 +15,7 @@ public class Rat : Enemy
         DefenceDice = new Dice(1, 6, 1);
     }
     public override void Update(LevelData level)
-    { 
+    {
         int newX = this.X;
         int newY = this.Y;
 
@@ -32,7 +30,7 @@ public class Rat : Enemy
         {
             this.MoveTo(newX, newY);
         }
-        
+
 
 
 
@@ -40,5 +38,5 @@ public class Rat : Enemy
         // TODO: Update()
     }
 
-    
+
 }

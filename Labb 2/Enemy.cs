@@ -5,24 +5,10 @@ namespace Labb_2;
 
 
 
-public abstract class Enemy : LevelElement
+public abstract class Enemy : Character
 {
-    public string Name { get; set; }
-
-    public int HP { get; set; }
-
-    public Dice AttackDice { get; set; }
-
-    public Dice DefenceDice { get; set; }
-
+    
     public abstract void Update(LevelData level);
-
-    public void EraseFromDungeon()
-    {
-        Console.SetCursorPosition(X, Y);
-        Console.Write(" ");
-        
-    }
 
     public void EnemyAttacks(Player player)
     {

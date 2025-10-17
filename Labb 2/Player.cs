@@ -1,14 +1,8 @@
 ﻿namespace Labb_2;
 
-public class Player : LevelElement
+public class Player : Character 
 {
-    public string Name { get; set; }
-
-    public int HP { get; set; }
-
-    public Dice AttackDice { get; set; }
-
-    public Dice DefenceDice { get; set; }
+    
 
     public Player(int x, int y)
     {

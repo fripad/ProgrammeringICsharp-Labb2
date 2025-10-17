@@ -15,14 +15,7 @@ public abstract class LevelElement
         Console.ResetColor();
     }
 
-    public void MoveTo(int newX, int newY)
-    {
-        Console.SetCursorPosition(X, Y);
-        Console.Write(" ");
-        X = newX;
-        Y = newY;
-        Draw();
-    }
+    
 
 
  
