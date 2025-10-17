@@ -15,34 +15,17 @@ public abstract class LevelElement
         Console.ResetColor();
     }
 
-    public void MoveIn(Direction direction)
+    public void MoveTo(int newX, int newY)
     {
         Console.SetCursorPosition(X, Y);
         Console.Write(" ");
-
-        switch (direction)
-        {
-            case Direction.Up:
-                Y--;
-                Draw();
-                break;
-            case Direction.Down:
-                Y++;
-                Draw();
-                break;
-            case Direction.Left:
-                X--;
-                Draw();
-                break;
-            case Direction.Right:
-                X++;
-                Draw();
-                break;
-        }
-
-
-
+        X = newX;
+        Y = newY;
+        Draw();
     }
+
+
+ 
 
 
 }

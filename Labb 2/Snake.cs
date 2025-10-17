@@ -14,7 +14,7 @@ public class Snake : Enemy
         DefenceDice = new Dice(1, 8, 5);
         
     }
-    public override void Update()
+    public override void Update(LevelData level)
     {
         // TODO: Update()
     }

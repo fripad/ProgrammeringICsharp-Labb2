@@ -22,5 +22,22 @@ public class Player : LevelElement
         DefenceDice = new Dice(2, 6, 0);
     }
 
+    public void PlayerAttacks(Enemy enemy)
+    {
 
+        int attackPoints = this.AttackDice.Throw();
+        int defencePoints = enemy.DefenceDice.Throw();
+        int resultOfAttack = attackPoints - defencePoints;
+        if (resultOfAttack > 0)
+        {
+            enemy.HP -= resultOfAttack;
+            if (enemy.HP <= 0)
+            {
+                enemy.EraseFromDungeon();
+                // TODO: //enemy.Erase(); erase måste ta bort position och plats i list elements
+            }
+        }
+    }
+
+   
 }

@@ -33,8 +33,6 @@ internal class Program
 
         Player? player = null;
 
-        Rat rat = null;
-
         foreach (var element in newGame.Elements)
         {
             element.Draw();
@@ -43,125 +41,64 @@ internal class Program
             {
                 player = p;
             }
-            if (element is Rat r)
-            {
-                rat = r;
-            }
 
         }
-
-
-
-        LevelElement? Collision(int newX, int newY)
-        {
-            foreach (var element in newGame.Elements)
-            {
-                if (element.X == newX && element.Y == newY)
-                {
-                    return element;
-                }
-            }
-
-            return null;
-
-        }
-
-        //void CollideWithEnemy()
-        //{
-        //    if (collisionElement is Enemy enemy)
-        //        {
-        //        int attackPoints = player.AttackDice.Throw();
-        //        int defencePoints = enemy.DefenceDice.Throw();
-        //        int resultOfAttack = attackPoints - defencePoints;
-        //        if (resultOfAttack > 0)
-        //        {
-        //            enemy.HP -= resultOfAttack;
-        //            if (enemy.HP <= 0)
-        //            {
-        //                // TODO: //enemy.Erase(); erase måste ta bort position och plats i list elements
-        //            }
-
-
-        //        }
-
-        //    }
-        //}
-
-
-
-
 
         while (player.HP > 0)
         {
 
             ConsoleKeyInfo playerInput = Console.ReadKey(true);
-            int newX;
-            int newY;
+            int newX = player.X;
+            int newY = player.Y;
 
-            if (playerInput.Key == ConsoleKey.UpArrow)
+            if (playerInput.Key == ConsoleKey.UpArrow) newY--;
+            else if (playerInput.Key == ConsoleKey.DownArrow) newY++;
+            else if (playerInput.Key == ConsoleKey.LeftArrow) newX--;
+            else if (playerInput.Key == ConsoleKey.RightArrow) newX++;
+
+            LevelElement? collisionElement = newGame.GetLevelElementAtPosition(newX, newY);
+            if (collisionElement == null)
             {
-                newX = player.X;
-                newY = player.Y - 1;
+                player.MoveTo(newX, newY);
+            }
+            else if (collisionElement is Enemy enemy)
+            {
+                player.PlayerAttacks(enemy);
+                enemy.EnemyAttacks(player);
+            }
 
-                LevelElement? collisionElement = Collision(newX, newY);
-                if (collisionElement == null)
+            foreach (var element in newGame.Elements)
+            {
+                if (element is Enemy enemy)
                 {
-                    player.MoveIn(Direction.Up);
-                }
-                else if (collisionElement is Enemy enemy)
-                {
-                    int attackPoints = player.AttackDice.Throw();
-                    int defencePoints = enemy.DefenceDice.Throw();
-                    int resultOfAttack = attackPoints - defencePoints;
-                    if (resultOfAttack > 0)
+                    if (enemy.HP > 0)
                     {
-                        enemy.HP -= resultOfAttack;
-                        if (enemy.HP <= 0)
-                        {
-                            // TODO: //enemy.Erase(); erase måste ta bort position och plats i list elements
-                        }
-
-
+                        enemy.Update(newGame);
                     }
 
+
+                    else
+                    {
+                        enemy.EraseFromDungeon();
+
+                        int indexOfThisEnemy = newGame.Elements.FindIndex(newGame => enemy.HP >= 0);
+
+                        if (indexOfThisEnemy != -1)
+                        {
+                            newGame.Elements.RemoveAt(indexOfThisEnemy); //exception: indexoutofbounds 
+                        }
+
+                    }
                 }
-            }
-            else if (playerInput.Key == ConsoleKey.DownArrow)
-            {
-                newX = player.X;
-                newY = player.Y + 1;
 
-                LevelElement? collisionElement = Collision(newX, newY);
-                if (collisionElement == null)
-                {
-                    player.MoveIn(Direction.Down);
-                }
 
             }
-            else if (playerInput.Key == ConsoleKey.LeftArrow)
-            {
-                newX = player.X - 1;
-                newY = player.Y;
-
-                LevelElement? collisionElement = Collision(newX, newY);
-                if (collisionElement == null)
-                {
-                    player.MoveIn(Direction.Left);
-                }
-            }
-            else if (playerInput.Key == ConsoleKey.RightArrow)
-            {
-                newX = player.X + 1;
-                newY = player.Y;
-
-                LevelElement? collisionElement = Collision(newX, newY);
-                if (collisionElement == null)
-                {
-                    player.MoveIn(Direction.Right);
-                }
-            }
-
+            // TODO: enemy.Turn() eller enemy.EnemyTurn()
+            //loopa fiender & if enemy så enemy.update
+            //
+            //2.move (inkl. newXY, collision, MoveTo eller collision is player)
             //rats turn?? 
+            //rat.MoveRat();
 
         }
     }
@@ -171,41 +108,18 @@ internal class Program
 
     //}
 
-
-
-
-
-
     //is collision between , gör boolean istället
     //kolla i update istället?
 
+    // TODO: Game Loop
+
+    // TODO: Vision range: 
+
+    // TODO: Attack & försvar:
+
+    // TODO: Förflyttningsmönster, se Update()
+
 }
-
-
-
-
-// TODO: 
-/*Game Loop
-En game loop är en loop som körs om och om igen medan spelet är igång
-och i vårat fall kommer ett varv i loopen motsvaras av en omgång i spelet. 
-För varje varv i loopen inväntar vi att användaren trycker in en knapp; 
-sedan utför vi spelarens drag, följt av datorns drag (uppdatera alla fiender), innan vi loopar igen. 
-Möjligtvis kan man ha en knapp (Esc) för att avsluta loopen/spelet.
- 
-När spelaren/fiender flyttar på sig behöver vi beräkna deras nya position 
-och leta igenom alla vår LevelElements för att se om det finns något annat objekt på den platsen man försöker flytta till.
-Om det finns en vägg eller annat objekt (fiende/spelaren) på platsen 
-måste förflyttningen avbrytas och den tidigare positionen gälla. 
-Notera dock att om spelaren flyttar sig till en plats där det står en fiende 
-så attackerar han denna (mer om detta längre ner). Detsamma gäller om en fiende flyttar sig till platsen där spelaren står. 
-Fiender kan dock inte attackera varandra i spelet.
-Se övning @ i exercises - loopar */
-
-// TODO: Vision range: 
-
-// TODO: Attack & försvar:
-
-// TODO: Förflyttningsmönster, se Update()
 
 
 

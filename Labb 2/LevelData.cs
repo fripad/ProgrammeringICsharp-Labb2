@@ -52,14 +52,28 @@ public class LevelData
                 {
                     x++;
                 }
-
+                // TODO: gör om till switch?
 
             }
         }
 
     }
 
-    // TODO: gör om till switch?
+    public LevelElement? GetLevelElementAtPosition(int x, int y)
+    {
+        foreach (var element in Elements)
+        {
+            if (element.X == x && element.Y == y)
+            {
+                return element;
+            }
+        }
+
+        return null;
+
+    }
+    
+    
 
 
 
