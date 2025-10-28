@@ -8,7 +8,7 @@ namespace Labb_2;
 public abstract class Enemy : Character
 {
     
-    public abstract void Update(LevelData level);
+    public abstract void Update(LevelData level, Player player);
 
     public void EnemyAttacks(Player player)
     {

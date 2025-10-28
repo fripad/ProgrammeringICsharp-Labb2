@@ -10,52 +10,62 @@ public class LevelData
         get { return _elements; }
     }
 
+    public int PlayerStartX { get; set; }
+
+    public int PlayerStartY { get; set; }
+
+    public int MessageStartY { get; set; }
+
     public void Load(string filename)
     {
         _elements = new List<LevelElement>();
 
 
-        using (StreamReader reader = new StreamReader(filename))
+        using StreamReader reader = new StreamReader(filename);
+
+        int x = 0;
+        int y = 0;
+        while (!reader.EndOfStream)
         {
-            int x = 0;
-            int y = 0;
-            while (!reader.EndOfStream)
+            char gameChar = (char)reader.Read();
+
+            if (gameChar == '#')
             {
-                char gameChar = (char)reader.Read();
-
-                if (gameChar == '#')
-                {
-                    Elements.Add(new Wall(x, y));
-                }
-
-                if (gameChar == 'r')
-                {
-                    Elements.Add(new Rat(x, y));
-                }
-
-                if (gameChar == 's')
-                {
-                    Elements.Add(new Snake(x, y));
-                }
-
-                if (gameChar == '@')
-                {
-                    Elements.Add(new Player(x, y));
-                }
-
-                if (gameChar == '\n')
-                {
-                    y++;
-                    x = 0;
-                }
-                else
-                {
-                    x++;
-                }
-                // TODO: gör om till switch?
-
+                Elements.Add(new Wall(x, y));
             }
+
+            if (gameChar == 'r')
+            {
+                Elements.Add(new Rat(x, y));
+            }
+
+            if (gameChar == 's')
+            {
+                Elements.Add(new Snake(x, y));
+            }
+
+            if (gameChar == '@')
+            {
+                PlayerStartX = x;
+                PlayerStartY = y;
+            }
+
+            if (gameChar == '\n')
+            {
+                y++;
+                x = 0;
+            }
+            else
+            {
+                x++;
+            }
+
+            // TODO: gör om till switch?
+
         }
+        y += 2;
+        MessageStartY = y;
+
 
     }
 
@@ -72,6 +82,26 @@ public class LevelData
         return null;
 
     }
+
+    public void PrintMessage(string message)
+    {
+        const int allowedMessageLength = 50;
+
+        Console.SetCursorPosition(0, MessageStartY);
+        Console.Write(new string(' ', allowedMessageLength));
+        Console.SetCursorPosition(0, MessageStartY);
+
+        if (message.Length >= allowedMessageLength)
+        {
+            Console.WriteLine($"Message is {message.Length}, it is too long.");
+            return;
+        }
+       
+        Console.WriteLine(message);
+        
+    }
+
+
     
     
 

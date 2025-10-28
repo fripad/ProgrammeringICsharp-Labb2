@@ -14,7 +14,7 @@ public class Rat : Enemy
         AttackDice = new Dice(1, 6, 3);
         DefenceDice = new Dice(1, 6, 1);
     }
-    public override void Update(LevelData level)
+    public override void Update(LevelData level, Player player)
     {
         int newX = this.X;
         int newY = this.Y;
@@ -31,11 +31,6 @@ public class Rat : Enemy
             this.MoveTo(newX, newY);
         }
 
-
-
-
-
-        // TODO: Update()
     }
 
 

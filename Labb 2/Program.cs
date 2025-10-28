@@ -1,4 +1,5 @@
 ﻿using Labb_2;
+using System.ComponentModel;
 
 internal class Program
 {
@@ -12,7 +13,7 @@ internal class Program
         // Start the game by pressing Enter\r\n" +
         //""");
 
-        // TODO: greet player, explain how to move, prompt for key input + Console.Clear();
+        // TODO: greet player, explain how to move, prompt for key input (+ Console.Clear(); ?)
 
         ConsoleKeyInfo pressedKey = Console.ReadKey(true);
 
@@ -30,21 +31,25 @@ internal class Program
         LevelData newGame = new LevelData();
 
         newGame.Load("Level1.txt");
+        // TODO: fråga om namn? 
 
-        Player? player = null;
+
+        Player player = new Player(newGame.PlayerStartX, newGame.PlayerStartY);
 
         foreach (var element in newGame.Elements)
         {
-            element.Draw();
-
-            if (element is Player p)
+            if (player.IsNear(element, player.ViewRange))
             {
-                player = p;
+                element.Draw();
+                element.IsDrawn = true;
             }
+            
 
         }
 
-        while (player.HP > 0)
+        player.Draw();
+
+        while (player.IsAlive)
         {
 
             ConsoleKeyInfo playerInput = Console.ReadKey(true);
@@ -66,56 +71,61 @@ internal class Program
                 player.PlayerAttacks(enemy);
                 enemy.EnemyAttacks(player);
             }
-
-            foreach (var element in newGame.Elements)
+            if (!player.IsAlive)
             {
+                break;
+            }
+
+            for (int i = newGame.Elements.Count - 1; i >= 0; i--)
+            {
+                var element = newGame.Elements[i];
+
+
                 if (element is Enemy enemy)
                 {
-                    if (enemy.HP > 0)
+                    if (enemy.IsAlive)
                     {
-                        enemy.Update(newGame);
-                    } 
-                    else
-                    {
-                        enemy.EraseFromDungeon();
+                        enemy.Update(newGame, player);
 
-                        int indexOfThisEnemy = newGame.Elements.FindIndex(newGame => enemy.HP >= 0);
 
-                        if (indexOfThisEnemy != -1)
+                        if (collisionElement is Player collisionPlayer)
                         {
-                            newGame.Elements.RemoveAt(indexOfThisEnemy); //exception: indexoutofbounds 
+                            enemy.Attack(collisionPlayer);
+
+                            //Console.WriteLine($"{this.Name} attacks with {attackPoints}, {opponent.Name} defends with {defencePoints}!");
                         }
 
                     }
+                    else
+                    {
+                        enemy.EraseVisually();
+                        newGame.Elements.RemoveAt(i);
+
+                    }
                 }
+                
+
 
 
             }
-            // TODO: enemy.Turn() eller enemy.EnemyTurn()
-            //loopa fiender & if enemy så enemy.update
-            //
-            //2.move (inkl. newXY, collision, MoveTo eller collision is player)
-            //rats turn?? 
-            //rat.MoveRat();
+
 
         }
+        // TODO: game over message 
+            
     }
 
-    //static? private? void GameLoop()
-    //{
-
-    //}
-
-    //is collision between , gör boolean istället
-    //kolla i update istället?
-
     // TODO: Game Loop
+        //ha i metod i annan klass
 
     // TODO: Vision range: 
+        //använd IsNear, gör metod för draw/erase? 
 
     // TODO: Attack & försvar:
-
-    // TODO: Förflyttningsmönster, se Update()
+        //metod Battle?
+        //PrintMessage under och efter battle
+        //snake battle
+        //enemy battle
 
 }
 
