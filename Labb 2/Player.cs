@@ -1,4 +1,6 @@
-﻿namespace Labb_2;
+﻿using System.Numerics;
+
+namespace Labb_2;
 
 public class Player : Character 
 {
@@ -18,22 +20,21 @@ public class Player : Character
         
     }
 
-    public void PlayerAttacks(Enemy enemy)
+    public string PlayerAttacks(Enemy enemy)
     {
 
         int attackPoints = this.AttackDice.Throw();
-        Console.WriteLine();
         int defencePoints = enemy.DefenceDice.Throw();
         int resultOfAttack = attackPoints - defencePoints;
-        if (resultOfAttack > 0)
+        
+        if (resultOfAttack <= 0)
         {
-            enemy.HP -= resultOfAttack;
-            if (enemy.HP <= 0)
-            {
-                enemy.EraseVisually();
-                // TODO: inte göra detta här? ta bort ur newGame.Elements ej åtkomst här
-            }
+            return $"You attack {enemy.Name}! Your attack is blocked! Player HP: {HP} {enemy.Name} HP: {enemy.HP}";
         }
+        
+        enemy.HP -= resultOfAttack;
+        
+        return $"You attack with {attackPoints} {enemy.Name} defends with {defencePoints} and takes {resultOfAttack} damage! Player HP: {HP} {enemy.Name} HP: {enemy.HP}";
     }
 
     public bool IsNear(LevelElement anyElement, int range)

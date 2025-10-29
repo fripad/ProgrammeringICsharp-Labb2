@@ -3,6 +3,7 @@
 public class Rat : Enemy
 {
     private readonly Random random = new Random();
+
     public Rat(int x, int y)
     {
         X = x;
@@ -13,25 +14,18 @@ public class Rat : Enemy
         HP = 10;
         AttackDice = new Dice(1, 6, 3);
         DefenceDice = new Dice(1, 6, 1);
+        ToDraw = false;
     }
+
     public override void Update(LevelData level, Player player)
     {
-        int newX = this.X;
-        int newY = this.Y;
+        TargetX = X;
+        TargetY = Y;
 
         Direction randomDirection = (Direction)random.Next(4);
-        if (randomDirection == Direction.Up) newY--;
-        else if (randomDirection == Direction.Down) newY++;
-        else if (randomDirection == Direction.Left) newX--;
-        else if (randomDirection == Direction.Right) newX++;
-
-        LevelElement? collisionElement = level.GetLevelElementAtPosition(newX, newY);
-        if (collisionElement == null)
-        {
-            this.MoveTo(newX, newY);
-        }
-
+        if (randomDirection == Direction.Up) TargetY--;
+        else if (randomDirection == Direction.Down) TargetY++;
+        else if (randomDirection == Direction.Left) TargetX--;
+        else if (randomDirection == Direction.Right) TargetX++;
     }
-
-
 }

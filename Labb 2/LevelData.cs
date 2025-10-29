@@ -85,7 +85,7 @@ public class LevelData
 
     public void PrintMessage(string message)
     {
-        const int allowedMessageLength = 50;
+        const int allowedMessageLength = 100;
 
         Console.SetCursorPosition(0, MessageStartY);
         Console.Write(new string(' ', allowedMessageLength));
@@ -98,12 +98,38 @@ public class LevelData
         }
        
         Console.WriteLine(message);
-        
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+    }
+
+    public void UpdateVisibility(Player player)
+    {
+        foreach (var element in Elements)
+        {
+            bool isNear = player.IsNear(element, player.ViewRange);
+
+            if (element is Wall wall && !wall.IsDrawn && isNear)
+            {
+                wall.Draw();
+
+            }
+            else if (element is Enemy enemy)
+            {
+
+                if (isNear && !enemy.IsDrawn)
+                {
+                    enemy.Draw();
+                }
+                else if (!isNear && enemy.IsDrawn)
+                {
+                    enemy.EraseVisually();
+                }
+            }
+        }
     }
 
 
-    
-    
+
+
 
 
 

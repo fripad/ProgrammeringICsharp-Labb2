@@ -1,4 +1,6 @@
-﻿public abstract class LevelElement 
+﻿namespace Labb_2;
+
+public abstract class LevelElement 
 {
     public int X { get; set; }
     public int Y { get; set; }
@@ -16,6 +18,7 @@
         Console.Write(Character);
         Console.ResetColor();
         IsDrawn = true;
+        //här kolla isnear?
     }
 
     

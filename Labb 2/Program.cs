@@ -1,6 +1,7 @@
-﻿using Labb_2;
-using System.ComponentModel;
+﻿using System;
+using System.Xml.Linq;
 
+namespace Labb_2;
 internal class Program
 {
     private static void Main(string[] args)
@@ -13,7 +14,7 @@ internal class Program
         // Start the game by pressing Enter\r\n" +
         //""");
 
-        // TODO: greet player, explain how to move, prompt for key input (+ Console.Clear(); ?)
+        // TODO: greet player, explain how to move, explain messages,  prompt for key input (+ Console.Clear(); ?)
 
         ConsoleKeyInfo pressedKey = Console.ReadKey(true);
 
@@ -28,26 +29,16 @@ internal class Program
 
         Console.CursorVisible = true;
 
-        LevelData newGame = new LevelData();
+        LevelData level = new LevelData();
 
-        newGame.Load("Level1.txt");
+        level.Load("Level1.txt");
         // TODO: fråga om namn? 
 
 
-        Player player = new Player(newGame.PlayerStartX, newGame.PlayerStartY);
-
-        foreach (var element in newGame.Elements)
-        {
-            if (player.IsNear(element, player.ViewRange))
-            {
-                element.Draw();
-                element.IsDrawn = true;
-            }
-            
-
-        }
+        Player player = new Player(level.PlayerStartX, level.PlayerStartY);
 
         player.Draw();
+        level.UpdateVisibility(player);
 
         while (player.IsAlive)
         {
@@ -61,71 +52,95 @@ internal class Program
             else if (playerInput.Key == ConsoleKey.LeftArrow) newX--;
             else if (playerInput.Key == ConsoleKey.RightArrow) newX++;
 
-            LevelElement? collisionElement = newGame.GetLevelElementAtPosition(newX, newY);
-            if (collisionElement == null)
+            LevelElement? playerCollision = level.GetLevelElementAtPosition(newX, newY);
+            if (playerCollision == null)
             {
                 player.MoveTo(newX, newY);
+                level.UpdateVisibility(player);
             }
-            else if (collisionElement is Enemy enemy)
+            else if (playerCollision is Enemy enemy)
             {
                 player.PlayerAttacks(enemy);
-                enemy.EnemyAttacks(player);
+                level.PrintMessage(player.PlayerAttacks(enemy));
+
+
+                if (enemy.IsAlive)
+                {
+                    enemy.EnemyAttacks(player);
+                    level.PrintMessage(enemy.EnemyAttacks(player));
+
+                }
             }
+
             if (!player.IsAlive)
             {
                 break;
             }
 
-            for (int i = newGame.Elements.Count - 1; i >= 0; i--)
+            for (int i = level.Elements.Count - 1; i >= 0; i--)
             {
-                var element = newGame.Elements[i];
-
+                LevelElement element = level.Elements[i];
 
                 if (element is Enemy enemy)
                 {
                     if (enemy.IsAlive)
                     {
-                        enemy.Update(newGame, player);
+                        enemy.Update(level, player);
+              
+                        LevelElement? enemyCollision = level.GetLevelElementAtPosition(enemy.TargetX, enemy.TargetY);
 
-
-                        if (collisionElement is Player collisionPlayer)
+                        if (enemyCollision == null)
                         {
-                            enemy.Attack(collisionPlayer);
+                            enemy.MoveTo(enemy.TargetX, enemy.TargetY);
+                        }
+                        else if (enemyCollision is Player collisionPlayer)
+                        {
+                            enemy.EnemyAttacks(player);
+                            level.PrintMessage(enemy.EnemyAttacks(player));
 
-                            //Console.WriteLine($"{this.Name} attacks with {attackPoints}, {opponent.Name} defends with {defencePoints}!");
+                            if (player.IsAlive)
+                            {
+                                player.PlayerAttacks(enemy);
+                                level.PrintMessage(player.PlayerAttacks(enemy));
+                            }
+                            else
+                            {
+                                break;
+                            }
+
                         }
 
                     }
-                    else
+                    else if (!enemy.IsAlive)
                     {
                         enemy.EraseVisually();
-                        newGame.Elements.RemoveAt(i);
-
+                        level.Elements.RemoveAt(i);
                     }
                 }
-                
-
-
-
             }
+            level.UpdateVisibility(player);
 
-
+           
         }
         // TODO: game over message 
-            
+
+    
+
     }
+                            
+    
+    //Console.WriteLine($"{this.Name} attacks with {attackPoints}, {opponent.Name} defends with {defencePoints}!");
+
+
 
     // TODO: Game Loop
-        //ha i metod i annan klass
-
-    // TODO: Vision range: 
-        //använd IsNear, gör metod för draw/erase? 
+    //ha i metod i annan klass
 
     // TODO: Attack & försvar:
-        //metod Battle?
-        //PrintMessage under och efter battle
-        //snake battle
-        //enemy battle
+    //metod Battle?
+    //PrintMessage under och efter battle
+    //snake battle
+    //enemy battle
 
 }
 
