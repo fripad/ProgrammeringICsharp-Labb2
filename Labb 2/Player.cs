@@ -1,11 +1,9 @@
-﻿using System.Numerics;
+﻿namespace Labb_2;
 
-namespace Labb_2;
-
-public class Player : Character 
+public class Player : Character
 {
     public int ViewRange { get; set; }
-   
+
     public Player(int x, int y)
     {
         Name = "Player";
@@ -17,24 +15,22 @@ public class Player : Character
         AttackDice = new Dice(2, 6, 2);
         DefenceDice = new Dice(2, 6, 0);
         ViewRange = 5;
-        
     }
 
     public string PlayerAttacks(Enemy enemy)
     {
-
         int attackPoints = this.AttackDice.Throw();
         int defencePoints = enemy.DefenceDice.Throw();
         int resultOfAttack = attackPoints - defencePoints;
-        
+
         if (resultOfAttack <= 0)
         {
-            return $"You attack {enemy.Name}! Your attack is blocked! Player HP: {HP} {enemy.Name} HP: {enemy.HP}";
+            return $"You attack ({this.AttackDice.ToString()} => {attackPoints}), {enemy.Name} defends ({enemy.DefenceDice.ToString()} => {defencePoints})! {enemy.Name} takes no damage!";
         }
-        
+
         enemy.HP -= resultOfAttack;
-        
-        return $"You attack with {attackPoints} {enemy.Name} defends with {defencePoints} and takes {resultOfAttack} damage! Player HP: {HP} {enemy.Name} HP: {enemy.HP}";
+
+          return $"You attack ({this.AttackDice.ToString()} => {attackPoints}), {enemy.Name} defends ({enemy.DefenceDice.ToString()} => {defencePoints})! {enemy.Name} takes {resultOfAttack} damage!";
     }
 
     public bool IsNear(LevelElement anyElement, int range)
@@ -49,8 +45,6 @@ public class Player : Character
 
         int rangeSquared = range * range;
 
-        return distanceSquared <= rangeSquared; 
-
+        return distanceSquared <= rangeSquared;
     }
-
 }

@@ -1,15 +1,12 @@
 ﻿namespace Labb_2;
 
-public abstract class LevelElement 
+public abstract class LevelElement
 {
     public int X { get; set; }
     public int Y { get; set; }
     public char Character { get; set; }
     public ConsoleColor CharacterColor { get; set; }
-
     public bool IsDrawn { get; set; }
-
-    public bool IsVisible { get; set; }
 
     public void Draw()
     {
@@ -18,13 +15,5 @@ public abstract class LevelElement
         Console.Write(Character);
         Console.ResetColor();
         IsDrawn = true;
-        //här kolla isnear?
     }
-
-    
-
-
-
-
-
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Xml.Linq;
 
 namespace Labb_2;
-
-
 
 public abstract class Enemy : Character
 {
@@ -19,17 +16,13 @@ public abstract class Enemy : Character
 
         if (resultOfAttack <= 0)
         {
-            return $"{Name} attacks you! Attack is blocked! Player HP: {HP} {Name} HP: {HP}";
+            return $"{this.Name} attacks ({this.AttackDice.ToString()} => {attackPoints}), you defend ({player.DefenceDice.ToString()} => {defencePoints})! You take no damage! Your health is {player.HP}";
         }
 
         player.HP -= resultOfAttack;
 
-        return $"{Name} attacks with {attackPoints}, you defend with {defencePoints} and take {resultOfAttack} damage! Player HP: {player.HP} {Name} HP: {HP}"; 
-            
+        
+           return $"{this.Name} attacks ({this.AttackDice.ToString()} => {attackPoints}), you defend ({player.DefenceDice.ToString()} => {defencePoints})! You take {resultOfAttack} damage! Your health is {player.HP}";
     }
+   
 }
-            //$"{this.Name} attacks with {attackPoints}, {player.Name} defends with {defencePoints}!";
-
-            //$"{this.Name} attacks with {attackPoints}, {player.Name} defends with {defencePoints}!" +
-            //$"\r\n{player.Name} takes {resultOfAttack} damage! HP: {player.HP}"; 
-            

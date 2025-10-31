@@ -1,20 +1,23 @@
-﻿using System;
-using System.Xml.Linq;
-
-namespace Labb_2;
+﻿namespace Labb_2;
 internal class Program
 {
     private static void Main(string[] args)
     {
-        //Console.WriteLine(
-        //"""
-        //                Welcome to The Dungeon!
+        Console.CursorVisible = false;
+        Console.WriteLine(
+        """
+                        
+        
+                           Welcome to The Dungeon!
 
-        //Move your character using the Up, Down, Left and Right arrow keys
-        // Start the game by pressing Enter\r\n" +
-        //""");
+        Move your character using the Up, Down, Left and Right arrow keys
 
-        // TODO: greet player, explain how to move, explain messages,  prompt for key input (+ Console.Clear(); ?)
+        If you encounter enemies, attack them by colliding with them
+
+        When a message appears, press Enter to continue game
+
+        Start the game by pressing Enter 
+        """);
 
         ConsoleKeyInfo pressedKey = Console.ReadKey(true);
 
@@ -27,13 +30,11 @@ internal class Program
             return;
         }
 
-        Console.CursorVisible = true;
+        Console.Clear();
 
         LevelData level = new LevelData();
 
         level.Load("Level1.txt");
-        // TODO: fråga om namn? 
-
 
         Player player = new Player(level.PlayerStartX, level.PlayerStartY);
 
@@ -42,33 +43,31 @@ internal class Program
 
         while (player.IsAlive)
         {
-
             ConsoleKeyInfo playerInput = Console.ReadKey(true);
-            int newX = player.X;
-            int newY = player.Y;
+            player.TargetX = player.X;
+            player.TargetY = player.Y;
 
-            if (playerInput.Key == ConsoleKey.UpArrow) newY--;
-            else if (playerInput.Key == ConsoleKey.DownArrow) newY++;
-            else if (playerInput.Key == ConsoleKey.LeftArrow) newX--;
-            else if (playerInput.Key == ConsoleKey.RightArrow) newX++;
+            if (playerInput.Key == ConsoleKey.UpArrow) player.TargetY--;
+            else if (playerInput.Key == ConsoleKey.DownArrow) player.TargetY++;
+            else if (playerInput.Key == ConsoleKey.LeftArrow) player.TargetX--;
+            else if (playerInput.Key == ConsoleKey.RightArrow) player.TargetX++;
 
-            LevelElement? playerCollision = level.GetLevelElementAtPosition(newX, newY);
+            LevelElement? playerCollision = level.GetLevelElementAtPosition(player.TargetX, player.TargetY);
             if (playerCollision == null)
             {
-                player.MoveTo(newX, newY);
+                player.Move();
+                player.Draw();
                 level.UpdateVisibility(player);
             }
             else if (playerCollision is Enemy enemy)
             {
-                player.PlayerAttacks(enemy);
-                level.PrintMessage(player.PlayerAttacks(enemy));
-
+                string playerAttackMessage = player.PlayerAttacks(enemy);
+                level.PrintMessage(playerAttackMessage);
 
                 if (enemy.IsAlive)
                 {
-                    enemy.EnemyAttacks(player);
-                    level.PrintMessage(enemy.EnemyAttacks(player));
-
+                    string enemyAttackMessage = enemy.EnemyAttacks(player);
+                    level.PrintMessage(enemyAttackMessage);
                 }
             }
 
@@ -86,12 +85,12 @@ internal class Program
                     if (enemy.IsAlive)
                     {
                         enemy.Update(level, player);
-              
+
                         LevelElement? enemyCollision = level.GetLevelElementAtPosition(enemy.TargetX, enemy.TargetY);
 
                         if (enemyCollision == null)
                         {
-                            enemy.MoveTo(enemy.TargetX, enemy.TargetY);
+                            enemy.Move();
                         }
                         else if (enemyCollision is Player collisionPlayer)
                         {
@@ -107,9 +106,7 @@ internal class Program
                             {
                                 break;
                             }
-
                         }
-
                     }
                     else if (!enemy.IsAlive)
                     {
@@ -119,29 +116,15 @@ internal class Program
                 }
             }
             level.UpdateVisibility(player);
-
-           
+            player.Draw();
         }
-        // TODO: game over message 
+        Console.WriteLine("""
 
-    
-
+                               GAME OVER!
+                 
+                           
+            """);
     }
-                            
-    
-    //Console.WriteLine($"{this.Name} attacks with {attackPoints}, {opponent.Name} defends with {defencePoints}!");
-
-
-
-    // TODO: Game Loop
-    //ha i metod i annan klass
-
-    // TODO: Attack & försvar:
-    //metod Battle?
-    //PrintMessage under och efter battle
-    //snake battle
-    //enemy battle
-
 }
 
 

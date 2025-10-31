@@ -17,13 +17,10 @@ public class Snake : Enemy
         DefenceDice = new Dice(1, 8, 5);
         ScareDistance = 2;
         ToDraw = false;
-
     }
 
-    
     public override void Update(LevelData level, Player player)
     {
-
         if (!player.IsNear(this, ScareDistance))
         {
             return;
@@ -32,9 +29,7 @@ public class Snake : Enemy
         TargetX = X;
         TargetY = Y;
 
-        // TODO: bör egentligen välja axis att fly där avståndet störst, inte automatiskt y som nedan
-
-        if (player.Y < this.Y )
+        if (player.Y < this.Y)
         {
             TargetY++;
         }
@@ -50,6 +45,5 @@ public class Snake : Enemy
         {
             TargetX--;
         }
-
     }
 }

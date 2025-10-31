@@ -25,27 +25,11 @@
             IsDrawn = false;
         }
 
-        //move to()
-        //X = TargetX
-        public void MoveTo(int newX, int newY)
+        public void Move()
         {
             EraseVisually();
-            X = newX;
-            Y = newY;
-        }
-
-        public void Attack(Character opponent)
-        {
-
-            int attackPoints = this.AttackDice.Throw();
-            int defencePoints = opponent.DefenceDice.Throw();
-            int resultOfAttack = attackPoints - defencePoints;
-            
-
-            if (resultOfAttack > 0)
-            {
-                opponent.HP -= resultOfAttack;
-            }
+            X = TargetX;
+            Y = TargetY;
         }
 
         public void EnemyAttacks(Player player)
@@ -56,9 +40,7 @@
             if (resultOfAttack > 0)
             {
                 player.HP -= resultOfAttack;
-                
             }
         }
-
     }
 }

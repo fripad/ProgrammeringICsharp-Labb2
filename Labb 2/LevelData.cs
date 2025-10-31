@@ -2,7 +2,6 @@
 
 public class LevelData
 {
-
     private List<LevelElement> _elements;
 
     public List<LevelElement> Elements
@@ -60,12 +59,9 @@ public class LevelData
                 x++;
             }
 
-            // TODO: gör om till switch?
-
         }
         y += 2;
         MessageStartY = y;
-
 
     }
 
@@ -96,9 +92,9 @@ public class LevelData
             Console.WriteLine($"Message is {message.Length}, it is too long.");
             return;
         }
-       
+
         Console.WriteLine(message);
-        while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter) ;
     }
 
     public void UpdateVisibility(Player player)
@@ -126,11 +122,4 @@ public class LevelData
             }
         }
     }
-
-
-
-
-
-
-
 }

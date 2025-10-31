@@ -23,12 +23,10 @@ public class Dice
         }
 
         return sumOfThrow + _modifier;
-
     }
 
     public override string ToString()
     {
         return $"{_numberOfDice}d{_sidesPerDice}+{_modifier}";
     }
-
 }
